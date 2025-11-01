@@ -51,8 +51,6 @@ jobs:
 
       - name: Update kubeconfig
         run: aws eks update-kubeconfig --region ap-south-1 --name front-back-demo
-      - name: Verify connection
-        run: kubectl get nodes
 
       - name: Verify AWS and EKS access
         run: |
