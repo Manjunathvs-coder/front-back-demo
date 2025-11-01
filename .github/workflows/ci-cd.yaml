@@ -15,6 +15,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        
+      - name: Generate package-lock.json (if missing)
+        run: |
+            cd backend
+            npm install
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -54,6 +59,6 @@ jobs:
           kubectl apply -f k8s/backend-service.yaml
           kubectl apply -f k8s/frontend-deployment.yaml
           kubectl apply -f k8s/frontend-service.yaml
-          kubectl apply -f k8s/secret.yaml   # check actual file name spelling
+          kubectl apply -f k8s/secret.yaml   
           kubectl apply -f k8s/ingress.yaml
           kubectl apply -f k8s/hpa-backend.yaml
