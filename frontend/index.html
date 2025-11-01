@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>BankEase 2-Tier Demo</title>
+  <style>
+    body{font-family:Arial;margin:30px}
+    #events{border:1px solid #ddd;padding:10px;height:200px;overflow:auto}
+  </style>
+</head>
+<body>
+  <h2>BankEase — Realtime 2-Tier Demo</h2>
+  <form id="txForm">
+    From: <input id="from" value="acc1" /> 
+    To: <input id="to" value="acc2" />
+    Amount: <input id="amt" value="100" />
+    <button>Send</button>
+  </form>
+  <h3>Events</h3>
+  <div id="events"></div>
+
+  <script>
+    const eventsDiv = document.getElementById('events');
+    const evtSource = new EventSource('/events');
+    evtSource.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      const item = document.createElement('div');
+      item.textContent = JSON.stringify(data);
+      eventsDiv.prepend(item);
+    };
+
+    document.getElementById('txForm').addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const from = document.getElementById('from').value;
+      const to = document.getElementById('to').value;
+      const amount = document.getElementById('amt').value;
+      const res = await fetch('/api/transfer', {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json' },
+        body: JSON.stringify({ from, to, amount })
+      });
+      const json = await res.json();
+      console.log(json);
+    });
+  </script>
+</body>
+</html>
