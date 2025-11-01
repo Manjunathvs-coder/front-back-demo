@@ -54,6 +54,12 @@ jobs:
       - name: Verify connection
         run: kubectl get nodes
 
+      - name: Verify AWS and EKS access
+        run: |
+          aws sts get-caller-identity
+          aws eks update-kubeconfig --region ap-south-1 --name front-back-demo
+          kubectl get ns
+
       - name: Deploy Kubernetes manifests
         run: |
           kubectl apply -f k8s/namespace.yaml
